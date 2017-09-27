@@ -10,9 +10,9 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
   #etiquetas de los meses
   if(mlab=="es") mlab=c("E","F","M","A","M","J","J","A","S","O","N","D")
   else if(mlab=="en") mlab=c("J","F","M","A","M","J","J","A","S","O","N","D")
-  else mlab=c(1:12) #etiquetas numéricas
+  else mlab=c(1:12) #etiquetas numÃ©ricas
   dat <- as.matrix(dat)
-  if(shem) { #Hemisferio sur: desplazar los datos medio año
+  if(shem) { #Hemisferio sur: desplazar los datos medio aÃ±o
     m1 <- dat[,1:6]
     m2 <- dat[,7:12]
     dat <- cbind(m2,m1)
@@ -21,13 +21,13 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
   p <- dat[1,] #precipitaciones medias mensuales
   if(nr==2) tm <- dat[2,]
   else tm <- apply(dat[2:3,],2,mean)  #temperaturas medias mensuales
-  pmax <- max(p) #precipitación máxima
-  ymax <- 60  #máxima ordenada por defecto
+  pmax <- max(p) #precipitaciÃ³n mÃ¡xima
+  ymax <- 60  #mÃ¡xima ordenada por defecto
   if(pmax > 300) ymax <- 50 + 10*floor((pmax+100)/200)
-  ymin <- min(-1.5,min(tm)) #mínima ordenada sin redondear
+  ymin <- min(-1.5,min(tm)) #mÃ­nima ordenada sin redondear
   #ejes:
   if(ymin < -1.5) {
-    ymin=floor(ymin/10)*10 #mínima ordenada redondeada
+    ymin=floor(ymin/10)*10 #mÃ­nima ordenada redondeada
     labT <- paste(ymin)
     labP <- ""
     if(ymin < -10) {
@@ -50,22 +50,22 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
     }
   }
   plot(0:13-0.5,c(tm[12],tm[1:12],tm[1]),xlim=c(0,12),ylim=c(ymin,ymax),type="n",xaxs="i",yaxs="i",xaxp=c(0,12,12),xlab="",ylab="",xaxt="n",yaxt="n",bty="n")
-  lmin <- ymin #mínima ordenada a rotular
+  lmin <- ymin #mÃ­nima ordenada a rotular
   if(lmin==-1.5) lmin=0
   axis(2,((lmin/10):(ymax/10))*10,labels=labT,col.axis=tcol)
   axis(4,((lmin/10):(ymax/10))*10,labels=labP,col.axis=pcol)
-  mtext("C",2,col=tcol,las=1,line=3,adj=0,at=55)
+  mtext(expression(~degree~C),2,col=tcol,las=1,line=3,adj=0,at=55)
   mtext("mm",4,col=pcol,las=1,line=3,adj=1,at=55)
   abline(0,0)
   abline(50,0)
-  #rótulos:
+  #rÃ³tulos:
   if(is.na(alt)) mtext(est,line=2,adj=0)
   else mtext(paste(est," (",alt," m)",sep=""),line=2,adj=0)
   mtext(per,line=1,adj=0)
-  mtext(paste(round(mean(tm*10))/10,"C        ",round(sum(p))," mm",sep=""),line=1,adj=1)
+  mtext(paste(round(mean(tm*10))/10,expression(~degree~C),round(sum(p))," mm",sep=""),line=1,adj=1)
   x <- 0:13-0.5
   p2 <- c(p[12],p[1:12],p[1])
-  if(p3line) { #línea adicional de precipitación a escala 1:3
+  if(p3line) { #lÃ­nea adicional de precipitaciÃ³n a escala 1:3
     yl3 <- c(p[12],p[1:12],p[1])/3
     yl3[yl3>50] <- 50
   }
@@ -99,7 +99,7 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
       xl[n2] <- x[1]
       yl[n2] <- p2[1]/2
     }
-    for(i in 2:14) {  #demás puntos
+    for(i in 2:14) {  #demÃ¡s puntos
       if(gr) {  #si p anterior > 100
         n <- n+1
         if(p2[i]>100) {
@@ -146,7 +146,7 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
         }
       }
     }
-    if(!is.na(yp[n])) {  #cerrar último polígono
+    if(!is.na(yp[n])) {  #cerrar Ãºltimo polÃ­gono
       n <- n+1
       xp[n] <- xp[n-1]
       yp[n] <- 50
@@ -162,7 +162,7 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
   ti[ti<0] <- 0 #no poner tramas por debajo del cero
   d <- pi - ti
   xi <- (1:66)/5-0.7
-  xw <- subset(xi,d>0) #periodo húmedo
+  xw <- subset(xi,d>0) #periodo hÃºmedo
   y1 <- subset(pi,d>0)
   y2 <- subset(ti,d>0)
   if(length(xw)>0) segments(xw,y1,xw,y2,col=pcol,lty=1,lwd=1)
@@ -178,16 +178,16 @@ diagwl <- function(dat, est="", alt=NA, per="", margen=c(4,4,5,4),
   lines(xl[1:n2],yl[1:n2],col=pcol,lwd=2)
   if(p3line) lines(x,yl3)
   lines(x,c(tm[12],tm[1:12],tm[1]),col=tcol,lwd=2)
-  #media de las máximas del mes más cálido
+  #media de las mÃ¡ximas del mes mÃ¡s cÃ¡lido
   mtext(formatC(max(as.matrix(dat[2,])),digits=1,format="f"),2,las=1,
     line=2,at=35)
-  #media de las mínimas del mes más frío
+  #media de las mÃ­nimas del mes mÃ¡s frÃ­o
   mtext(formatC(min(as.matrix(dat[3,])),digits=1,format="f"),2,las=1,
     line=2,at=15)
-  #marcar límites de los meses:
+  #marcar lÃ­mites de los meses:
   for(i in 0:13) segments(i,0,i,-1.5)
-  #rótulos meses:
+  #rÃ³tulos meses:
   mtext(mlab,1,las=1,line=0.5,adj=0.5,at=x[2:13])
-  #reset old.par (restablecemos parámetros gráficos anteriores):
+  #reset old.par (restablecemos parÃ¡metros grÃ¡ficos anteriores):
   invisible()
 }
